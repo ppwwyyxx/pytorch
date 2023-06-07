@@ -257,10 +257,10 @@ class TestFSDPCheckpoint(FSDPTest):
                         offload_ctx = (
                             get_patched_save_on_cpu()(pin_memory=True)
                             if offload_activations
-                            else contextlib.suppress()
+                            else contextlib.nullcontext()
                         )
                         with offload_ctx:
-                            out = checkpoint(m, inp)
+                            out = checkpoint(m, inp, use_reentrant=True)
                     else:
                         # _save_on_cpu should not be called yet
                         self.assertFalse(_save_on_cpu_called)

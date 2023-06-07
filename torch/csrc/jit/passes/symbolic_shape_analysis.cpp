@@ -103,7 +103,7 @@ struct ShapeArg
   }
 };
 
-std::ostream& operator<<(std::ostream& out, const ShapeArg& sa) {
+static std::ostream& operator<<(std::ostream& out, const ShapeArg& sa) {
   if (auto val = sa.asConstantInt()) {
     out << *val;
   } else if (auto ss = sa.asShapeSymbol()) {
@@ -149,7 +149,7 @@ struct ShapeArguments {
   std::vector<ShapeArg> maybe_shape_symbols_;
 };
 
-std::ostream& operator<<(std::ostream& os, const ShapeArguments& sa) {
+static std::ostream& operator<<(std::ostream& os, const ShapeArguments& sa) {
   if (!sa.has_dim()) {
     os << "(UNKNOWN DIM)";
     return os;
@@ -176,7 +176,7 @@ bool symbolicShapeAnalysisTestModeEnabled() {
 
 using SSArgument = c10::variant<ShapeArguments, IValue>;
 
-std::ostream& operator<<(std::ostream& out, const SSArgument& sa) {
+static std::ostream& operator<<(std::ostream& out, const SSArgument& sa) {
   if (const IValue* iv = c10::get_if<IValue>(&sa)) {
     out << *iv;
   } else {
@@ -268,17 +268,17 @@ c10::SymbolicShape extractListShape(
 }
 
 // Symbolic Shape Analysis works through iteratively partially evaluating
-// a TorchScript shape compute graph by inputing properties from input
+// a TorchScript shape compute graph by inputting properties from input
 // Tensors. We can substitute in properties like `len(x)` and `x[1]`
 // if they are statically on the input Tensors. We can also use
 // assertions like `assert len(x) == 4` in order to refine the input
 // length and unroll loops over its elements. We iteratively optimize and
 // substitute in properties until we are unable to make any further
 // optimizations. Finally, we try to extract Tensor properties from the output.
-// For instance `return [1, 2, inp[2] + 1, inp[3]]` we know that the ouptut
+// For instance `return [1, 2, inp[2] + 1, inp[3]]` we know that the output
 // will be length 4 with first two dimensions equal to 1 and 2. We can also
 // deduce that the 4th dimension has the same symbolic shape as inp[3], which
-// means that we do know its concrete value statically but we can asssign sets
+// means that we do know its concrete value statically but we can assign sets
 // of tensor dimensions which must be equal at runtime.
 
 struct SymbolicShapeOpAnalyzer {
@@ -287,7 +287,7 @@ struct SymbolicShapeOpAnalyzer {
   std::vector<SSArgument> inputs_;
 
   // For the case where we have a JIT graph,
-  // subsititute optional types for their component types
+  // substitute optional types for their component types
   // if the type is known. This doesn't need to be done
   // for known IValues.
   void refineInputUnionTypes(const Node* parent_graph_node) {
@@ -571,7 +571,7 @@ struct SymbolicShapeOpAnalyzer {
     TORCH_INTERNAL_ASSERT(
         shape_compute_graph_->outputs().size() == schema_->returns().size());
     // TODO: would be nice if there were easy facility to look at uses and see
-    // if they are all pure instead of instanting db.
+    // if they are all pure instead of instantiating db.
     auto res = std::vector<c10::SymbolicShape>();
     AliasDb db(shape_compute_graph_);
     for (size_t i = 0; i < shape_compute_graph_->outputs().size(); ++i) {

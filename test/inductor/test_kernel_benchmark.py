@@ -9,6 +9,7 @@ from torch._dynamo.test_case import run_tests, TestCase
 from torch._inductor import config
 from torch._inductor.codecache import PyCodeCache
 from torch.testing import FileCheck
+from torch.testing._internal.common_utils import TEST_WITH_ROCM
 from torch.testing._internal.inductor_utils import HAS_CUDA
 
 
@@ -85,7 +86,7 @@ class TestKernelBenchmark(TestCase):
         M, N, K = 1000, 1000, 10
         x = torch.rand(M, K).to("cuda")
         y = torch.rand(K, N).to("cuda")
-        out = torch.compile(f)(x, y)
+        out = f(x, y)
 
         compiled_module = self.get_compiled_module()
 
@@ -104,5 +105,5 @@ class TestKernelBenchmark(TestCase):
 
 
 if __name__ == "__main__":
-    if HAS_CUDA:
+    if HAS_CUDA and not TEST_WITH_ROCM:
         run_tests()

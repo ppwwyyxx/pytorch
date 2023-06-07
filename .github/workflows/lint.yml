@@ -2,9 +2,10 @@ name: Lint
 
 on:
   pull_request:
+    branches-ignore:
+      - nightly
   push:
     branches:
-      - master
       - main
       - release/*
       - landchecks/*
@@ -54,7 +55,7 @@ jobs:
         # Run lintrunner on all files
         if ! lintrunner --force-color --all-files --tee-json=lint.json 2> /dev/null; then
           echo ""
-          echo -e "\e[1m\e[36mYou can reproduce these results locally by using \`lintrunner\`.\e[0m"
+          echo -e "\e[1m\e[36mYou can reproduce these results locally by using \`lintrunner\`. (If you don't get the same results, run \'lintrunner init\' to update your local linter)\e[0m"
           echo -e "\e[1m\e[36mSee https://github.com/pytorch/pytorch/wiki/lintrunner for setup instructions.\e[0m"
           RC=1
         fi
@@ -108,7 +109,7 @@ jobs:
     if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-pr-sanity-checks')
     steps:
       - name: Checkout PyTorch
-        uses: pytorch/pytorch/.github/actions/checkout-pytorch@master
+        uses: pytorch/pytorch/.github/actions/checkout-pytorch@main
         with:
           submodules: false
           fetch-depth: -1
@@ -146,7 +147,7 @@ jobs:
           echo '    .github/scripts/generate_ci_workflows.py'
           echo
           echo 'If running that command does nothing, you may need to rebase'
-          echo 'onto a more recent commit from the PyTorch master branch.'
+          echo 'onto a more recent commit from the PyTorch main branch.'
           RC=1
         fi
 
@@ -221,7 +222,7 @@ jobs:
       # [see note: pytorch repo ref]
       # deep clone (fetch-depth 0) required, to allow us to use git log
       - name: Checkout PyTorch
-        uses: pytorch/pytorch/.github/actions/checkout-pytorch@master
+        uses: pytorch/pytorch/.github/actions/checkout-pytorch@main
         with:
           submodules: false
           fetch-depth: 1

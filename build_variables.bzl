@@ -337,6 +337,7 @@ core_sources_full_mobile_no_backend_interface_xplat = [
     "torch/csrc/jit/passes/quantization/fusion_passes.cpp",
     "torch/csrc/jit/passes/quantization/register_packed_params.cpp",
     "torch/csrc/jit/python/update_graph_executor_opt.cpp",
+    "torch/csrc/jit/python/utf8_decoding_ignore.cpp",
     "torch/csrc/jit/runtime/argument_spec.cpp",
     "torch/csrc/jit/runtime/autodiff.cpp",
     "torch/csrc/jit/runtime/graph_executor.cpp",
@@ -821,6 +822,7 @@ libtorch_python_core_sources = [
     "torch/csrc/autograd/python_torch_functions_manual.cpp",
     "torch/csrc/autograd/python_variable.cpp",
     "torch/csrc/autograd/python_variable_indexing.cpp",
+    "torch/csrc/dynamo/cpython_defs.c",
     "torch/csrc/dynamo/eval_frame.c",
     "torch/csrc/dynamo/guards.cpp",
     "torch/csrc/dynamo/init.cpp",
@@ -951,6 +953,7 @@ aten_cpu_non_globed_sources = [
     "aten/src/ATen/detail/MPSHooksInterface.cpp",
     "aten/src/ATen/detail/ORTHooksInterface.cpp",
     "aten/src/ATen/detail/XPUHooksInterface.cpp",
+    "aten/src/ATen/detail/MTIAHooksInterface.cpp",
     "aten/src/ATen/record_function.cpp",
     "aten/src/ATen/Dispatch.cpp",
     "aten/src/ATen/SequenceNumber.cpp",
@@ -964,6 +967,7 @@ aten_cpu_non_globed_headers = [
     "aten/src/ATen/detail/HIPHooksInterface.h",
     "aten/src/ATen/detail/ORTHooksInterface.h",
     "aten/src/ATen/detail/XPUHooksInterface.h",
+    "aten/src/ATen/detail/MTIAHooksInterface.h",
 ]
 
 aten_cpu_source_non_codegen_list = [
@@ -974,6 +978,7 @@ aten_cpu_source_non_codegen_list = [
     "aten/src/ATen/DLConvertor.cpp",
     "aten/src/ATen/EmptyTensor.cpp",
     "aten/src/ATen/ExpandUtils.cpp",
+    "aten/src/ATen/CachedTensorUtils.cpp",
     "aten/src/ATen/FunctionalInverses.cpp",
     "aten/src/ATen/FunctionalStorageImpl.cpp",
     "aten/src/ATen/FunctionalTensorWrapper.cpp",
@@ -1236,7 +1241,6 @@ aten_native_source_non_codegen_list = [
     "aten/src/ATen/native/Bucketization.cpp",
     "aten/src/ATen/native/CPUBlas.cpp",
     "aten/src/ATen/native/ChanelShuffle.cpp",
-    "aten/src/ATen/native/Collectives.cpp",
     "aten/src/ATen/native/Col2Im.cpp",
     "aten/src/ATen/native/PadNd.cpp",
     "aten/src/ATen/native/Convolution.cpp",
